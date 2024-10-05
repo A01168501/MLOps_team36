@@ -1,0 +1,62 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Virtual environment directories
+itesm_venv/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheel/
+*.egg-info/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Data files
+data/.DS_Store
+
+# Model files
+models/
+model_weights.h5
+model.pkl
+*.h5
+*.pt
+*.pth
+*.pb
+
+# Logs
+*.log
+logs/
+*.out
+*.err
+
+# Environment variables
+.env
+.env.*
+
+# IDE and editor config files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary files
+*.tmp
+*.temp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
