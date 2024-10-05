@@ -2,6 +2,7 @@ TEAM 36
 
 Héctor Antonio Tafoya Garcia        A00466155
 Gerardo Quiroga Najera              A00967999
+David Nava Jiménez                  A01168501
 Fernando Jimenez Pereyra            A01734609
 Donnovan Alfredo Ramírez Rodríguez  A01795652
 
