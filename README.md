@@ -6,6 +6,9 @@
 - **Fernando Jimenez Pereyra** - A01734609
 - **Donnovan Alfredo Ramírez Rodríguez** - A01795652
 
+## FASE 1
+Documentar y generar estructura inicial del proyecto
+
 ## Problema: Air Quality
 
 El dataset con el que vamos a trabajar corresponde a “air quality”, el cual es un dataset multivariable con el que se pueden aplicar técnicas de series de tiempo. El objetivo es obtener por medio de regresión la predicción de la variable objetivo. Cuenta con 9,358 instancias u observaciones y 15 variables distintas.
