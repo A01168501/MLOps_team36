@@ -1,0 +1,89 @@
+schema: '2.0'
+stages:
+  load_data:
+    cmd: python src/scripts/load_data.py data/raw/AirQualityUCI.csv data/processed/train_test_data.csv
+    deps:
+    - path: data/raw/AirQualityUCI.csv
+      hash: md5
+      md5: acb99ee32686a698dd8308a97ae6db55
+      size: 771337
+    - path: src/scripts/load_data.py
+      hash: md5
+      md5: 15d3c61eadef21fe67f4183e407766c0
+      size: 249
+    outs:
+    - path: data/processed/train_test_data.csv
+      hash: md5
+      md5: af449f8b75f44a2e29c0f2bf6e127695
+      size: 917095
+  preprocess:
+    cmd: python src/scripts/preprocess_data.py data/processed/train_test_data.csv
+      data/processed/X_train.csv data/processed/X_test.csv data/processed/y_train.csv
+      data/processed/y_test.csv
+    deps:
+    - path: data/processed/train_test_data.csv
+      hash: md5
+      md5: af449f8b75f44a2e29c0f2bf6e127695
+      size: 917095
+    - path: src/scripts/preprocess_data.py
+      hash: md5
+      md5: cf01bcf66556ec65f2c7570f5afeec48
+      size: 1348
+    outs:
+    - path: data/processed/X_test.csv
+      hash: md5
+      md5: 539ec1892612fa4235099d8627b23037
+      size: 370395
+    - path: data/processed/X_train.csv
+      hash: md5
+      md5: 5092e4d10ef2d318467c0f2290a7c18f
+      size: 1478668
+    - path: data/processed/y_test.csv
+      hash: md5
+      md5: 748f822d2dde53dc47fdfdb8e08d2c4c
+      size: 8465
+    - path: data/processed/y_train.csv
+      hash: md5
+      md5: b3ff2952b5ee87694901e5fad1d9e7d8
+      size: 34031
+  train:
+    cmd: python src/scripts/train.py data/processed/X_train.csv data/processed/y_train.csv
+      models/model.pkl
+    deps:
+    - path: data/processed/X_train.csv
+      hash: md5
+      md5: 5092e4d10ef2d318467c0f2290a7c18f
+      size: 1478668
+    - path: data/processed/y_train.csv
+      hash: md5
+      md5: b3ff2952b5ee87694901e5fad1d9e7d8
+      size: 34031
+    - path: src/scripts/train.py
+      hash: md5
+      md5: 3814b8e6250671af5d4dfdc24e73d1b4
+      size: 733
+    outs:
+    - path: models/model.pkl
+      hash: md5
+      md5: ec1fc606b4081e8a2ad14e191a53683e
+      size: 2455
+  evaluate:
+    cmd: python src/scripts/evaluate.py models/model.pkl data/processed/X_test.csv
+      data/processed/y_test.csv
+    deps:
+    - path: data/processed/X_test.csv
+      hash: md5
+      md5: 539ec1892612fa4235099d8627b23037
+      size: 370395
+    - path: data/processed/y_test.csv
+      hash: md5
+      md5: 748f822d2dde53dc47fdfdb8e08d2c4c
+      size: 8465
+    - path: models/model.pkl
+      hash: md5
+      md5: ec1fc606b4081e8a2ad14e191a53683e
+      size: 2455
+    - path: src/scripts/evaluate.py
+      hash: md5
+      md5: 3f33d01f63da5b619b6661878f83de41
+      size: 642
