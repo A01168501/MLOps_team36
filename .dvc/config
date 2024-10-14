@@ -1,4 +1,4 @@
 [core]
-    remote = myremote
-['remote "myremote"']
-    url = /tmp/dvcstore
+    remote = Google_Drive
+['remote "Google_Drive"']
+    url = gdrive://1hB5x_eUrZU6X0BJanH-8e8m-USI3qNV1
