@@ -4,6 +4,7 @@ __pycache__/
 
 # Virtual environment directories
 itesm_venv/
+env/
 
 # Distribution / packaging
 .Python
