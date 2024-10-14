@@ -61,3 +61,7 @@ logs/
 Thumbs.db
 ehthumbs.db
 Icon?env/
+
+
+# Training processing files
+data/processed/

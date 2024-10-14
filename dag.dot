@@ -1,0 +1,13 @@
+strict digraph  {
+"load_data";
+"preprocess";
+"train";
+"evaluate";
+"data/raw/AirQualityUCI.csv.dvc";
+"load_data" -> "preprocess";
+"preprocess" -> "train";
+"preprocess" -> "evaluate";
+"train" -> "evaluate";
+"data/raw/AirQualityUCI.csv.dvc" -> "load_data";
+}
+
