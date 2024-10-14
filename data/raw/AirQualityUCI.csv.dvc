@@ -1,0 +1,5 @@
+outs:
+- md5: acb99ee32686a698dd8308a97ae6db55
+  size: 771337
+  hash: md5
+  path: AirQualityUCI.csv

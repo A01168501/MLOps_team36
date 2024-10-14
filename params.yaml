@@ -1,0 +1,4 @@
+data:
+  filepath: "data/raw/AirQualityUCI.csv"
+  processed: data/processed/
+  models: models/
