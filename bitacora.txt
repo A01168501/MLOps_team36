@@ -13,6 +13,11 @@ Ejecutar Docker:
 
     * Posteriormente puede consultarse mlflow en la ruta http://localhost:5000
 
+    * El uso de docker es alterno al uso de itesm_venv, si se usa docker ya no es necesario usar el venv para esto.
+
+    * Se cambio de config.env a solo .env para que tomara las variables correctamente desde el docker-compose sin tener que enviar el argumento como en la clase.
+
+
 Agregar Configuraciones:
     * Se agregó configuraciones en config.env, y docker-compose incluye dicha referencia (para no tener que usar el comando docker-compose --env-file config.env up -d --build)
 
@@ -31,3 +36,11 @@ MLflow es una plataforma de código abierto para gestionar el ciclo de vida del 
     Implementación de Modelos: Desplegar modelos en producción.
     Registro de Datos: Mantener un registro de los datos y las configuraciones utilizadas en cada experimento.
 
+
+
+
+#### Uso de MLFLOW 
+
+Configuraciones
+
+    * Se usó un Dockerfile especifico para el tracker_server que se encuentra en mlflow/Dockerfile, este solo incluye las dependencias requeridas para dicho servicio.

@@ -1,5 +1,6 @@
 import pandas as pd
 import sys
+import mlflow
 
 def load_data(filepath):
     return pd.read_csv(filepath)
@@ -7,5 +8,16 @@ def load_data(filepath):
 if __name__ == '__main__':
     data_path = sys.argv[1]
     output_file = sys.argv[2]
-    data = load_data(data_path)
-    data.to_csv(output_file, index=False)
+
+    with mlflow.start_run():
+        data = load_data(data_path)
+        data.to_csv(output_file, index=False)
+        
+        # Log the output file as an artifact
+        mlflow.log_artifact(output_file)
+        
+        # Log parameters
+        mlflow.log_param("input_file", data_path)
+        mlflow.log_param("output_file", output_file)
+
+        print("Data loaded and logged in MLflow")

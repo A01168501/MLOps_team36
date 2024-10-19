@@ -42,9 +42,19 @@ docker-compose build
 **Iniciar los contenedores**
 docker-compose up
 
+Puedes combinar ambos comandos en uno solo:
+docker-compose up -d --build
+(d es necesario para ejecutar los contenedores en segundo plano)
+
 **Confirmar mlflow instalado correctamente**
 Puede consultarlo accediendo a http://localhost:5000
 
+**Detener servicios:**
+
+Para terminar servicios cuando terminas
+
+```bash
+docker-compose down
 
 
 ## Problema: Air Quality

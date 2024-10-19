@@ -65,3 +65,8 @@ Icon?env/
 
 # Training processing files
 data/processed/
+
+# Mlflow files
+mlruns/
+db_data/
+minio_data/
