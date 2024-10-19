@@ -1,0 +1,33 @@
+
+## Oct 18
+
+Instalar Docker:
+    * Instalar Docker Desktop desde su sitio oficial para tu OS
+    * Crear cuenta en docker 
+
+Ejecutar Docker:
+    * Cada integrante que clone el repositorio, debe ejecutar los comandos:
+
+    docker-compose build  // se construirá la imagen docker utilizando el Dockerfile
+    docker-compose up // Esto levantará los servicios definidos en el docker-compose.yml
+
+    * Posteriormente puede consultarse mlflow en la ruta http://localhost:5000
+
+Agregar Configuraciones:
+    * Se agregó configuraciones en config.env, y docker-compose incluye dicha referencia (para no tener que usar el comando docker-compose --env-file config.env up -d --build)
+
+
+Minio:
+    * Docker permite usar minio de forma local, lo cual puede ser recomendable para el desarrollo
+
+
+
+¿Qué es MLflow?
+
+MLflow es una plataforma de código abierto para gestionar el ciclo de vida del aprendizaje automático. Proporciona herramientas para:
+
+    Seguimiento de Experimentos: Registrar y visualizar los resultados de los experimentos de aprendizaje automático.
+    Gestión de Modelos: Almacenar y gestionar modelos de aprendizaje automático.
+    Implementación de Modelos: Desplegar modelos en producción.
+    Registro de Datos: Mantener un registro de los datos y las configuraciones utilizadas en cada experimento.
+
