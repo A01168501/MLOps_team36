@@ -44,3 +44,17 @@ MLflow es una plataforma de código abierto para gestionar el ciclo de vida del 
 Configuraciones
 
     * Se usó un Dockerfile especifico para el tracker_server que se encuentra en mlflow/Dockerfile, este solo incluye las dependencias requeridas para dicho servicio.
+
+
+## OCT 20
+
+    * Debido a que estamos uando minio, la propiedad env MLFOOW_TRACKING_URI tiene que ser el localhost de mlflow (local) o su url remota en lugar del local de docker
+    , en este caso localhost:5000
+
+    * Actualicé muchas rutas para usar las rutas de los contenedores en lugar de los dominios localhost
+
+    * Debido a lo anterior, es necesario crear un contenedor dvc, ya que ejecutar simplemente el dvc fuera del contenedor no logra entender las rutas de los contenedores de docker como
+    http://tracking_server:, http://minio:, etc.
+
+    * Parece que la API key local de minio no se genera en automatico, hay que iniciar en localhost:9001 y agregar un api key y colocarla en .env, o en su defecto
+    usar las que se tienen ahi y crear un nuevo registro con el mismo nombre.

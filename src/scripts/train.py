@@ -25,6 +25,9 @@ if __name__ == '__main__':
     y_train_path = sys.argv[2]
     model_path = sys.argv[3]
 
+
+    mlflow.set_tracking_uri("HTTP://tracking_server:5000")
+
     with mlflow.start_run():
         # train model
         model = train_model(X_train_path, y_train_path)

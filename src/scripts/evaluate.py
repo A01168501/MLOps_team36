@@ -19,6 +19,8 @@ if __name__ == '__main__':
     model_path = sys.argv[1]
     X_test_path = sys.argv[2]
     y_test_path = sys.argv[3]
+
+    mlflow.set_tracking_uri("HTTP://tracking_server:5000")
     
     # Start an MLflow run
     with mlflow.start_run():

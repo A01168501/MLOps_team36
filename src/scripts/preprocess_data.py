@@ -29,6 +29,8 @@ if __name__ == '__main__':
     output_train_target = sys.argv[4]
     output_test_target = sys.argv[5]
 
+    mlflow.set_tracking_uri("HTTP://tracking_server:5000")
+
     with mlflow.start_run():
         X_train, X_test, y_train, y_test = preprocess_data(data_path)
         pd.DataFrame(X_train).to_csv(output_train_features, index=False)

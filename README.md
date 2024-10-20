@@ -49,6 +49,10 @@ docker-compose up -d --build
 **Confirmar mlflow instalado correctamente**
 Puede consultarlo accediendo a http://localhost:5000
 
+**Colocar las api key en minio**
+Entrar a localhost:9001, usar las accesos encontrados en .env, agregar un access key desde la consola usando los mismos MINIO_ACCESS_KEY y SECRET encontrados en .env
+Volver a levantar el docker con esta config.
+
 **Detener servicios:**
 
 Para terminar servicios cuando terminas
