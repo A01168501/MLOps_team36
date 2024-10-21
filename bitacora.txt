@@ -1,0 +1,65 @@
+
+## Oct 18
+
+Instalar Docker:
+    * Instalar Docker Desktop desde su sitio oficial para tu OS
+    * Crear cuenta en docker 
+
+Ejecutar Docker:
+    * Cada integrante que clone el repositorio, debe ejecutar los comandos:
+
+    docker-compose build  // se construirá la imagen docker utilizando el Dockerfile
+    docker-compose up // Esto levantará los servicios definidos en el docker-compose.yml
+
+    * Posteriormente puede consultarse mlflow en la ruta http://localhost:5000
+
+    * El uso de docker es alterno al uso de itesm_venv, si se usa docker ya no es necesario usar el venv para esto.
+
+    * Se cambio de config.env a solo .env para que tomara las variables correctamente desde el docker-compose sin tener que enviar el argumento como en la clase.
+
+
+Agregar Configuraciones:
+    * Se agregó configuraciones en config.env, y docker-compose incluye dicha referencia (para no tener que usar el comando docker-compose --env-file config.env up -d --build)
+
+
+Minio:
+    * Docker permite usar minio de forma local, lo cual puede ser recomendable para el desarrollo
+
+
+
+¿Qué es MLflow?
+
+MLflow es una plataforma de código abierto para gestionar el ciclo de vida del aprendizaje automático. Proporciona herramientas para:
+
+    Seguimiento de Experimentos: Registrar y visualizar los resultados de los experimentos de aprendizaje automático.
+    Gestión de Modelos: Almacenar y gestionar modelos de aprendizaje automático.
+    Implementación de Modelos: Desplegar modelos en producción.
+    Registro de Datos: Mantener un registro de los datos y las configuraciones utilizadas en cada experimento.
+
+
+
+
+#### Uso de MLFLOW 
+
+Configuraciones
+
+    * Se usó un Dockerfile especifico para el tracker_server que se encuentra en mlflow/Dockerfile, este solo incluye las dependencias requeridas para dicho servicio.
+
+
+## OCT 20
+
+    * Debido a que estamos uando minio, la propiedad env MLFOOW_TRACKING_URI tiene que ser el localhost de mlflow (local) o su url remota en lugar del local de docker
+    , en este caso localhost:5000
+
+    * Actualicé muchas rutas para usar las rutas de los contenedores en lugar de los dominios localhost
+
+    * Debido a lo anterior, es necesario crear un contenedor dvc, ya que ejecutar simplemente el dvc fuera del contenedor no logra entender las rutas de los contenedores de docker como
+    http://tracking_server:, http://minio:, etc.
+
+    * Parece que la API key local de minio no se genera en automatico, hay que iniciar en localhost:9001 y agregar un api key y colocarla en .env, o en su defecto
+    usar las que se tienen ahi y crear un nuevo registro con el mismo nombre.
+
+    * Actualicé la info para que el create_buckets se iniciara antes de tracking_server, y le dimos unos segs a dvc antes de ejecutar el pipepeline para poder dar pie a que termine.
+      Otra solución seria no agregar el CMD a este contenedor y manejarlo de forma manual luego de iniciar los servicios.
+
+    * Al correr tenemos el primer registro funcionando,

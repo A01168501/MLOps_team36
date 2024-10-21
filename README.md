@@ -9,6 +9,58 @@
 ## FASE 1
 Documentar y generar estructura inicial del proyecto
 
+## FASE 2
+Configurar Docker y MLflow
+
+
+## Como ejecutar el proyecto
+Luego de clonar el proyecto, posicionar la terminal en la carpeta raiz, posteriormente:
+
+**Activar el Virtual Environment:**
+
+   - **On Windows:**
+
+     ```bash
+     .\itesm_venv\Scripts\activate
+     ```
+
+     or if using Git Bash
+
+     ```bash
+     source \itesm_venv\Scripts\activate
+     ```
+
+   - **On Linux and MacOS:**
+
+     ```bash
+     source itesm_venv/bin/activate
+
+
+**Construir la imagen:**
+docker-compose build
+
+**Iniciar los contenedores**
+docker-compose up
+
+Puedes combinar ambos comandos en uno solo:
+docker-compose up -d --build
+(d es necesario para ejecutar los contenedores en segundo plano)
+
+**Confirmar mlflow instalado correctamente**
+Puede consultarlo accediendo a http://localhost:5000
+
+**Colocar las api key en minio**
+Entrar a localhost:9001, usar las accesos encontrados en .env, agregar un access key desde la consola usando los mismos MINIO_ACCESS_KEY y SECRET encontrados en .env
+Volver a levantar el docker con esta config.
+
+**Detener servicios:**
+
+Para terminar servicios cuando terminas
+
+```bash
+docker-compose down
+
+
 ## Problema: Air Quality
 
 El dataset con el que vamos a trabajar corresponde a “air quality”, el cual es un dataset multivariable con el que se pueden aplicar técnicas de series de tiempo. El objetivo es obtener por medio de regresión la predicción de la variable objetivo. Cuenta con 9,358 instancias u observaciones y 15 variables distintas.

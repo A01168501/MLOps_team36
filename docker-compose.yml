@@ -1,0 +1,135 @@
+services:
+  db:
+    restart: always
+    image: postgres
+    container_name: mlflow_db
+    expose:
+      - "${PG_PORT}"
+    networks:
+      - backend
+    environment:
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_DATABASE=${PG_DATABASE}
+    volumes:
+      - ./db_data:/var/lib/postgresql/data/
+    healthcheck:
+      test: ["CMD", "pg_isready", "-p", "${PG_PORT}", "-U", "${PG_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+  
+  minio:
+    restart: always
+    image: minio/minio
+    container_name: mlflow_minio
+    volumes:
+      - ./minio_data:/data
+    ports:
+      - "${MINIO_PORT}:${MINIO_PORT}"
+      - "${MINIO_CONSOLE_PORT}:${MINIO_CONSOLE_PORT}"
+    networks:
+      - frontend
+      - backend
+    environment:
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_ACCESS_KEY}
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MINIO_ADDRESS=${MINIO_ADDRESS}
+      - MINIO_PORT=${MINIO_PORT}
+      - MINIO_STORAGE_USE_HTTPS=${MINIO_STORAGE_USE_HTTPS}
+      - MINIO_CONSOLE_ADDRESS=${MINIO_CONSOLE_ADDRESS}
+    command: server /data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://minio:${MINIO_PORT}/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+  
+  create_buckets:
+    image: minio/mc
+    container_name: mlflow_create_buckets
+    depends_on:
+      - minio
+    networks:
+      - backend
+    entrypoint: >
+      /bin/sh -c '
+      sleep 5;
+      /usr/bin/mc config host add minio http://minio:${MINIO_PORT} ${MINIO_ACCESS_KEY} ${MINIO_SECRET_ACCESS_KEY} --api S3v4;
+      echo "Checking for bucket: ${MLFLOW_BUCKET_NAME}";
+      if /usr/bin/mc ls minio | awk "{print \$1}" | grep -q "${MLFLOW_BUCKET_NAME}"; then
+        echo "Bucket ${MLFLOW_BUCKET_NAME} already exists.";
+      else
+        echo "Creating bucket: ${MLFLOW_BUCKET_NAME}";
+        /usr/bin/mc mb minio/${MLFLOW_BUCKET_NAME};
+        /usr/bin/mc policy download minio/${MLFLOW_BUCKET_NAME};
+      fi;
+      exit 0;
+      '
+
+# El servicio tracking_server es un servidor de seguimiento de MLflow que permite registrar, gestionar y acceder a los experimentos de aprendizaje automático.
+# Utiliza una base de datos PostgreSQL para el almacenamiento de metadatos y MinIO para el almacenamiento de artefactos. 
+# Este servicio es fundamental para cualquier flujo de trabajo de aprendizaje automático, ya que ayuda a rastrear el progreso y los resultados de los experimentos.
+
+  tracking_server:
+    restart: always
+    build: ./mlflow
+    image: mlflow_server
+    container_name: mlflow_server
+    depends_on:
+      - db
+      - minio
+      - create_buckets
+    volumes:
+      - ./data/raw:/app/data/raw  
+      - ./src:/app/src
+    ports:
+      - "${MLFLOW_PORT}:${MLFLOW_PORT}"
+    networks:
+      - frontend
+      - backend
+    environment:
+      - MLFLOW_TRACKING_URI=http://tracking_server:${MLFLOW_PORT}
+      - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
+      - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_ACCESS_KEY}
+      - MLFLOW_S3_ENDPOINT_URL=http://minio:${MINIO_PORT}
+      - MLFLOW_S3_IGNORE_TLS=true
+    command: >
+      mlflow server
+      --backend-store-uri postgresql://${PG_USER}:${PG_PASSWORD}@db:${PG_PORT}/${PG_DATABASE}
+      --host 0.0.0.0
+      --serve-artifacts
+      --artifacts-destination s3://${MLFLOW_BUCKET_NAME}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://tracking_server:${MLFLOW_PORT}/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+
+  dvc:
+    build:
+      context: .
+      dockerfile: dvc/Dockerfile
+    networks:
+      - frontend
+      - backend
+    volumes:
+      # mounting the container in the directory will serve as local saving changes, any changes made to the container willl be reflect in the directory.
+      - .:/app
+    depends_on:
+      - tracking_server
+    command: ["sh", "-c", "sleep 10 && dvc repro"]
+
+
+volumes:
+  db_data:
+  minio_data:
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
