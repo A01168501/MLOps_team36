@@ -19,18 +19,46 @@ stages:
       - ${data.processed}y_test.csv
 
   train:
-    cmd: python src/scripts/train.py ${data.processed}X_train.csv ${data.processed}y_train.csv ${data.models}model.pkl
+    cmd: python src/scripts/train.py ${data.processed}X_train.csv ${data.processed}y_train.csv ${data.models}
     deps:
       - src/scripts/train.py
       - ${data.processed}X_train.csv
       - ${data.processed}y_train.csv
     outs:
-      - ${data.models}model.pkl
+      - ${data.models}Linear_Regression_degree_2.pkl
+      - ${data.models}Linear_Regression_degree_3.pkl
+      - ${data.models}Linear_Regression_degree_4.pkl
+      - ${data.models}Random_Forest_n_100.pkl
 
-  evaluate:
-    cmd: python src/scripts/evaluate.py ${data.models}model.pkl ${data.processed}X_test.csv ${data.processed}y_test.csv
+
+  evaluate_lr_degree_2:
+    cmd: python src/scripts/evaluate.py ${data.models}Linear_Regression_degree_2.pkl ${data.processed}X_test.csv ${data.processed}y_test.csv
     deps:
       - src/scripts/evaluate.py
-      - ${data.models}model.pkl
+      - ${data.models}Linear_Regression_degree_2.pkl
+      - ${data.processed}X_test.csv
+      - ${data.processed}y_test.csv
+
+  evaluate_lr_degree_3:
+    cmd: python src/scripts/evaluate.py ${data.models}Linear_Regression_degree_3.pkl ${data.processed}X_test.csv ${data.processed}y_test.csv
+    deps:
+      - src/scripts/evaluate.py
+      - ${data.models}Linear_Regression_degree_3.pkl
+      - ${data.processed}X_test.csv
+      - ${data.processed}y_test.csv
+
+  evaluate_lr_degree_4:
+    cmd: python src/scripts/evaluate.py ${data.models}Linear_Regression_degree_4.pkl ${data.processed}X_test.csv ${data.processed}y_test.csv
+    deps:
+      - src/scripts/evaluate.py
+      - ${data.models}Linear_Regression_degree_4.pkl
+      - ${data.processed}X_test.csv
+      - ${data.processed}y_test.csv
+
+  evaluate_Random_Forest_n_100:
+    cmd: python src/scripts/evaluate.py ${data.models}Random_Forest_n_100.pkl ${data.processed}X_test.csv ${data.processed}y_test.csv
+    deps:
+      - src/scripts/evaluate.py
+      - ${data.models}Random_Forest_n_100.pkl
       - ${data.processed}X_test.csv
       - ${data.processed}y_test.csv
