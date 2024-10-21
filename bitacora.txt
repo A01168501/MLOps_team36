@@ -58,3 +58,8 @@ Configuraciones
 
     * Parece que la API key local de minio no se genera en automatico, hay que iniciar en localhost:9001 y agregar un api key y colocarla en .env, o en su defecto
     usar las que se tienen ahi y crear un nuevo registro con el mismo nombre.
+
+    * Actualicé la info para que el create_buckets se iniciara antes de tracking_server, y le dimos unos segs a dvc antes de ejecutar el pipepeline para poder dar pie a que termine.
+      Otra solución seria no agregar el CMD a este contenedor y manejarlo de forma manual luego de iniciar los servicios.
+
+    * Al correr tenemos el primer registro funcionando,

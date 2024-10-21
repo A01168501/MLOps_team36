@@ -124,22 +124,6 @@ services:
     command: ["sh", "-c", "sleep 10 && dvc repro"]
 
 
-##  Configuraciones mas complejas de dvc donde vendria en un dockerfile y se agregan variables de entorno
-#  dvc:
-#    build: ./dvc  # Assuming you have a Dockerfile in a 'dvc' directory
-#    container_name: dvc_container  # If you need to clarify the name
-#    depends_on:
-#      - tracking_server
-#    volumes:
-#      - .:/app  # Mount the current directory into the container
-#    environment:
-#      - MLFLOW_TRACKING_URI=http://tracking_server:${MLFLOW_PORT}
-#      - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
-#      - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_ACCESS_KEY}
-#      - MLFLOW_S3_ENDPOINT_URL=http://minio:${MINIO_PORT}
-#      - MLFLOW_S3_IGNORE_TLS=true
-#    command: ["sh", "-c", "sleep 10 && dvc repro"]  # Wait for tracking server to be ready, then run DVC repro
-
 volumes:
   db_data:
   minio_data:
