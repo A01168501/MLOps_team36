@@ -58,14 +58,8 @@ services:
       /bin/sh -c '
       sleep 5;
       /usr/bin/mc config host add minio http://minio:${MINIO_PORT} ${MINIO_ACCESS_KEY} ${MINIO_SECRET_ACCESS_KEY} --api S3v4;
-      echo "Checking for bucket: ${MLFLOW_BUCKET_NAME}";
-      if /usr/bin/mc ls minio | awk "{print \$1}" | grep -q "${MLFLOW_BUCKET_NAME}"; then
-        echo "Bucket ${MLFLOW_BUCKET_NAME} already exists.";
-      else
-        echo "Creating bucket: ${MLFLOW_BUCKET_NAME}";
-        /usr/bin/mc mb minio/${MLFLOW_BUCKET_NAME};
-        /usr/bin/mc policy download minio/${MLFLOW_BUCKET_NAME};
-      fi;
+      [[ ! -z "`/usr/bin/mc ls minio | grep challenge`" ]] || /usr/bin/mc mb minio/${MLFLOW_BUCKET_NAME};
+      /usr/bin/mc policy download minio/${MLFLOW_BUCKET_NAME};
       exit 0;
       '
 
