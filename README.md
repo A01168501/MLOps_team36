@@ -44,7 +44,7 @@ docker-compose up
 
 Puedes combinar ambos comandos en uno solo:
 docker-compose up -d --build
-(d es necesario para ejecutar los contenedores en segundo plano)
+(d se usa si queremos ejecutar los contenedores en segundo plano)
 
 **Confirmar mlflow instalado correctamente**
 Puede consultarlo accediendo a http://localhost:5000
