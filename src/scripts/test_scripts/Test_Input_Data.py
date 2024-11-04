@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import pytest
-import sys
 
 AQ_schema = {
     "Date": {
@@ -125,37 +124,54 @@ AQ_schema = {
     }
 }
 
-frame = {}
-# Obtener la ruta del archivo CSV desde los argumentos
-csv_path = '/home/alt9193/Documents/MLOps_team36/data/raw/AirQualityUCI.csv'
+@pytest.fixture
+def data_frame(request):
+    # Obtener la ruta del archivo CSV desde los argumentos
+    csv_path = request.config.getoption("--csv-file")
+    # Cargar el archivo CSV
+    df = pd.read_csv(csv_path)
 
-# Cargar el archivo CSV
-df = pd.read_csv(csv_path)
+    # Construir el diccionario 'frame' con min, max y dtype de cada columna
+    frame = {}
+    for column in df.columns:
+        dtype = str(df[column].dtype)
+        if dtype == 'object':
+            min_val = max_val = None
+        else:
+            min_val = df[column].min()
+            max_val = df[column].max()
 
-# Construir el diccionario 'frame' con min, max y dtype de cada columna
-for column in df.columns:
-    # Obtener el tipo de dato original
-    dtype = str(df[column].dtype)
-    
-    # Establecer min y max como None si es un tipo object
-    if dtype == 'object':
-        min_val = max_val = None
-    else:
-        # Para otros tipos de datos, calcular min y max
-        min_val = df[column].min()
-        max_val = df[column].max()
+        frame[column] = {
+            'range': {
+                'min': min_val,
+                'max': max_val
+            },
+            'dtype': dtype
+        }
 
-    # Crear el diccionario para la columna actual en el esquema
-    frame[column] = {
-        'range': {
-            'min': min_val,
-            'max': max_val
-        },
-        'dtype': dtype
-    }
+    return frame, df
 
+def test_data_frame_not_empty(data_frame):
+    """
+    Test that the provided DataFrame is not empty.
 
-def test_input_data_ranges():
+    This test checks two conditions:
+    1. The input is of type pandas DataFrame.
+    2. The DataFrame contains at least one row.
+
+    Args:
+        data_frame (tuple): A tuple where the second element is expected to be a pandas DataFrame.
+
+    Raises:
+        AssertionError: If the first condition fails, indicating the input is not a DataFrame,
+                        or if the second condition fails, indicating the DataFrame is empty.
+    """
+
+    _, df = data_frame
+    assert isinstance(df, pd.DataFrame)
+    assert df.shape[0] > 0
+
+def test_input_data_ranges(data_frame):
     """
     Tests the input data ranges for features defined in the AQ_schema.
 
@@ -180,6 +196,9 @@ def test_input_data_ranges():
         AssertionError: If any of the assertions fail, indicating that the 
         input data does not conform to the expected range constraints.
     """
+
+    frame, df = data_frame
+
     for feature in AQ_schema:
         if frame[feature]['dtype'] != 'object':
             if np.isnan(AQ_schema[feature]['range']['max']):
@@ -191,7 +210,7 @@ def test_input_data_ranges():
             else:
                 assert frame[feature]['range']['min'] <= AQ_schema[feature]['range']['min']
 
-def test_input_data_types():
+def test_input_data_types(data_frame):
     """
     Tests the data types of features in the input DataFrame against the 
     expected data types defined in the AQ_schema.
@@ -208,5 +227,7 @@ def test_input_data_types():
         AssertionError: If any of the assertions fail, indicating that the 
         input data type does not match the expected type in the AQ_schema.
     """
+    frame, _ = data_frame
+
     for feature in AQ_schema:
         assert frame[feature]['dtype'] == AQ_schema[feature]['dtype']
