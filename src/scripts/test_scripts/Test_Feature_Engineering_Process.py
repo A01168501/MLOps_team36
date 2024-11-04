@@ -1,28 +1,35 @@
-import pandas as pd
-import numpy as np
 import pytest
-import sys
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import MinMaxScaler
+from scripts.preprocess_data import DataPreprocessor
 
-data_path = '/home/alt9193/Documents/MLOps_team36/data/raw/AirQualityUCI.csv'
-data = pd.read_csv(data_path)
-data = data.drop(columns=["Date", "Time", "NMHC(GT)", "Unnamed: 15","Unnamed: 16"])
-data.applymap(lambda x: np.nan if x == -200 else x)
-data = data.dropna(subset=["CO(GT)"])
-data = data.apply(lambda col: col.fillna(col.mean()))
+@pytest.fixture
+def data_preprocessor(request):
+    data_path = request.config.getoption("--csv-file")
+    dp = DataPreprocessor(data_path)
+    dp.load_data()
+    dp.handle_missing_values()
+    dp.split_data()
+    dp.fit_scaler()
 
-X = data.drop("CO(GT)", axis=1)
-y = data["CO(GT)"]
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=27)
+    return dp
 
-scaler = MinMaxScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled = scaler.transform(X_test)
-
-def test_scaler_preprocessing_brings_x_train_mean_near_zero():
+def test_data_no_missing_values(data_preprocessor):
     """
-    Tests that the mean of the scaled training data (X_train_scaled) 
+    Tests that there are no missing values in the training and testing datasets.
+
+    This function asserts that both X_train and X_test contain no NaN values 
+    after the preprocessing steps have been completed.
+
+    Raises:
+        AssertionError: If any of the assertions fail, indicating that 
+        missing values still exist in the datasets.
+    """
+    
+    assert not data_preprocessor.X_train.isnull().values.any(), "X_train contains missing values"
+    assert not data_preprocessor.X_test.isnull().values.any(), "X_test contains missing values"
+
+def test_scaler_preprocessing_brings_x_train_mean_near_zero(data_preprocessor):
+    """
+    Tests that the mean of the scaled training data
     is near zero after applying MinMaxScaler.
 
     This function calculates the original mean of the training data (X_train) 
@@ -42,18 +49,23 @@ def test_scaler_preprocessing_brings_x_train_mean_near_zero():
         AssertionError: If any of the assertions fail, indicating that the 
         scaling process did not produce the expected results.
     """
-    original_mean = X_train.stack().mean()
+
+    original_mean = data_preprocessor.X_train.mean()
     
-    assert original_mean > X_train_scaled.mean()
-    assert 0 <= X_train_scaled.mean() <= 1, f"Mean of scaled data is {X_train_scaled.mean()}"
+    data_preprocessor.X_train = data_preprocessor.transform_data(data_preprocessor.X_train)
+
+    assert all(original_mean > data_preprocessor.X_train.mean()), "Original mean should be greater than scaled mean"
+    
+    scaled_mean = data_preprocessor.X_train.mean()
+    assert all(0 <= scaled_mean) and all(scaled_mean <= 1), f"Mean of scaled data is {scaled_mean}"
 
     print(f'The mean of the original X train is: {original_mean}')
-    print(f'The mean of the transformed X train is: {X_train_scaled.mean()}')
+    print(f'The mean of the transformed X train is: {scaled_mean}')
 
-def test_scaler_preprocessing_brings_x_train_std_below_one():
+def test_scaler_preprocessing_brings_x_train_std_below_one(data_preprocessor):
     """
     Tests that the standard deviation of the scaled training data 
-    (X_train_scaled) is below one after applying MinMaxScaler.
+    is below one after applying MinMaxScaler.
 
     This function asserts that the standard deviation of the scaled 
     training data is less than one, indicating that the scaling process 
@@ -65,5 +77,7 @@ def test_scaler_preprocessing_brings_x_train_std_below_one():
         AssertionError: If the assertion fails, indicating that the 
         standard deviation of the scaled data is not below one.
     """
-    assert X_train_scaled.std() < 1.0, f"Standard deviation of scaled data is {X_train_scaled.std()}"
-    print(f'The SD of the transformed X train is: {X_train_scaled.std()}')
+    
+    data_preprocessor.X_train = data_preprocessor.transform_data(data_preprocessor.X_train)
+    assert (data_preprocessor.X_train.std() < 1.0).all(), f"Standard deviation of scaled data is {data_preprocessor.X_train.std()}"
+    print(f'The SD of the transformed X train is: {data_preprocessor.X_train.std()}')
