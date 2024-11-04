@@ -156,6 +156,30 @@ for column in df.columns:
 
 
 def test_input_data_ranges():
+    """
+    Tests the input data ranges for features defined in the AQ_schema.
+
+    This function iterates over each feature in the AQ_schema and checks the 
+    following conditions:
+
+    1. If the data type of the feature in the input DataFrame `frame` 
+       is not 'object':
+       - It compares the maximum range value of the feature in the input 
+         frame against the maximum range defined in the AQ_schema. If the 
+         maximum value in AQ_schema is NaN, it asserts that the maximum value 
+         in the input frame is also NaN.
+       - It performs a similar check for the minimum range value, ensuring 
+         that if the minimum value in AQ_schema is NaN, the minimum value 
+         in the input frame is also NaN.
+
+    This ensures that the input data adheres to the defined range constraints 
+    in the AQ_schema and handles cases where range limits may be undefined 
+    (NaN).
+
+    Raises:
+        AssertionError: If any of the assertions fail, indicating that the 
+        input data does not conform to the expected range constraints.
+    """
     for feature in AQ_schema:
         if frame[feature]['dtype'] != 'object':
             if np.isnan(AQ_schema[feature]['range']['max']):
@@ -168,6 +192,21 @@ def test_input_data_ranges():
                 assert frame[feature]['range']['min'] <= AQ_schema[feature]['range']['min']
 
 def test_input_data_types():
-    # Verificar la compatibilidad entre tipos de datos
+    """
+    Tests the data types of features in the input DataFrame against the 
+    expected data types defined in the AQ_schema.
+
+    This function iterates over each feature in the AQ_schema and asserts 
+    that the data type of each feature in the input DataFrame `frame` matches 
+    the expected data type defined in the AQ_schema.
+
+    This ensures that the input data types are consistent with the schema 
+    specifications, which is critical for the correct processing and analysis 
+    of the data.
+
+    Raises:
+        AssertionError: If any of the assertions fail, indicating that the 
+        input data type does not match the expected type in the AQ_schema.
+    """
     for feature in AQ_schema:
         assert frame[feature]['dtype'] == AQ_schema[feature]['dtype']
