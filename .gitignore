@@ -70,3 +70,4 @@ data/processed/
 mlruns/
 db_data/
 minio_data/
+results/predictions

@@ -16,6 +16,13 @@ Configurar Docker y MLflow
 ## Como ejecutar el proyecto
 Luego de clonar el proyecto, posicionar la terminal en la carpeta raiz, posteriormente:
 
+**Crear el Virtual Environment:**
+Usar python3.10 para crear el ambiente compatible:
+
+ ```bash
+   python3.10 -m venv virtual_environment_name
+   ```
+
 **Activar el Virtual Environment:**
 
    - **On Windows:**
@@ -44,7 +51,7 @@ docker-compose up
 
 Puedes combinar ambos comandos en uno solo:
 docker-compose up -d --build
-(d es necesario para ejecutar los contenedores en segundo plano)
+(d se usa si queremos ejecutar los contenedores en segundo plano)
 
 **Confirmar mlflow instalado correctamente**
 Puede consultarlo accediendo a http://localhost:5000
@@ -59,6 +66,33 @@ Para terminar servicios cuando terminas
 
 ```bash
 docker-compose down
+```
+
+**Ejecutar pipeline:**
+
+Para ejecutar el pipeline, dentro del venv, usar el comando:
+
+```bash
+dvc repro
+```
+
+
+
+**Ejecutar predicción y evaluación:**
+
+Para ejecutar la evaluación, dentro del venv, correr el script de prediccion:
+
+```bash
+python src/scripts/predict.py <run_id> 
+```
+
+agregar -e para evaluar el modelo:
+
+```bash
+python src/scripts/predict.py <run_id> -e
+```
+
+Los resultados se agregarán en results/predictions/<run_id>
 
 
 ## Problema: Air Quality
