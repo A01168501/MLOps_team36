@@ -103,22 +103,6 @@ services:
       timeout: 10s
       retries: 3
 
-
-  dvc:
-    build:
-      context: .
-      dockerfile: dvc/Dockerfile
-    networks:
-      - frontend
-      - backend
-    volumes:
-      # mounting the container in the directory will serve as local saving changes, any changes made to the container willl be reflect in the directory.
-      - .:/app
-    depends_on:
-      - tracking_server
-    command: ["sh", "-c", "sleep 10 && dvc repro"]
-
-
 volumes:
   db_data:
   minio_data:

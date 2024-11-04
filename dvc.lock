@@ -9,8 +9,8 @@ stages:
       size: 771335
     - path: src/scripts/load_data.py
       hash: md5
-      md5: 9acc9911294e2378bdb693f0b65a5f81
-      size: 646
+      md5: b5024beccf933ed3390133943c83a308
+      size: 640
     outs:
     - path: data/processed/train_test_data.csv
       hash: md5
@@ -27,17 +27,17 @@ stages:
       size: 917095
     - path: src/scripts/preprocess_data.py
       hash: md5
-      md5: 0b5c44b325ebb9c94dca3d7197a58d74
-      size: 1946
+      md5: 7ffd6bc17cba8244a674cece80de274a
+      size: 2237
     outs:
     - path: data/processed/X_test.csv
       hash: md5
-      md5: 539ec1892612fa4235099d8627b23037
-      size: 370395
+      md5: 2dcf531e2110c97c2c64bddc81eba8ba
+      size: 370469
     - path: data/processed/X_train.csv
       hash: md5
-      md5: 5092e4d10ef2d318467c0f2290a7c18f
-      size: 1478668
+      md5: 8332bd549e7fb80ea565673ac35df3b4
+      size: 1478742
     - path: data/processed/y_test.csv
       hash: md5
       md5: 748f822d2dde53dc47fdfdb8e08d2c4c
@@ -52,33 +52,33 @@ stages:
     deps:
     - path: data/processed/X_train.csv
       hash: md5
-      md5: 5092e4d10ef2d318467c0f2290a7c18f
-      size: 1478668
+      md5: 8332bd549e7fb80ea565673ac35df3b4
+      size: 1478742
     - path: data/processed/y_train.csv
       hash: md5
       md5: b3ff2952b5ee87694901e5fad1d9e7d8
       size: 34031
     - path: src/scripts/train.py
       hash: md5
-      md5: 6774eca389e62a828568d13a9d41e34d
-      size: 2144
+      md5: 013e82187753b4c618e3d7a60fff4fc2
+      size: 2121
     outs:
     - path: models/Linear_Regression_degree_2.pkl
       hash: md5
-      md5: ec1fc606b4081e8a2ad14e191a53683e
-      size: 2455
+      md5: 46dc049f5397769c9838606e78906a9a
+      size: 2535
     - path: models/Linear_Regression_degree_3.pkl
       hash: md5
-      md5: d88b81c16152cef3545958dc474f955d
-      size: 7031
+      md5: 8f56d6af8fe683ac1decd084cd10ea56
+      size: 7111
     - path: models/Linear_Regression_degree_4.pkl
       hash: md5
-      md5: f816e734f88303ee0ba30e2d5f624c47
-      size: 23055
+      md5: eec31d2413293bfac5882dd8a924572e
+      size: 23135
     - path: models/Random_Forest_n_100.pkl
       hash: md5
-      md5: 275d334f86c23cd49a012ae91d135d14
-      size: 5621575
+      md5: 7a271b2737b5309818d67b20bc0b97d8
+      size: 5630583
   evaluate:
     cmd: python src/scripts/evaluate.py models/model.pkl data/processed/X_test.csv
       data/processed/y_test.csv
@@ -105,77 +105,79 @@ stages:
     deps:
     - path: data/processed/X_test.csv
       hash: md5
-      md5: 539ec1892612fa4235099d8627b23037
-      size: 370395
+      md5: 2dcf531e2110c97c2c64bddc81eba8ba
+      size: 370469
     - path: data/processed/y_test.csv
       hash: md5
       md5: 748f822d2dde53dc47fdfdb8e08d2c4c
       size: 8465
     - path: models/Linear_Regression_degree_2.pkl
       hash: md5
-      md5: ec1fc606b4081e8a2ad14e191a53683e
-      size: 2455
+      md5: 46dc049f5397769c9838606e78906a9a
+      size: 2535
     - path: src/scripts/evaluate.py
       hash: md5
-      md5: 0b1ebe148449a02444bc43841b4cd3f8
-      size: 1205
+      md5: b463bf4d630d492e2b5c47243aabf4ff
+      size: 1199
   evaluate_lr_degree_3:
     cmd: python src/scripts/evaluate.py models/Linear_Regression_degree_3.pkl data/processed/X_test.csv
       data/processed/y_test.csv
     deps:
     - path: data/processed/X_test.csv
       hash: md5
-      md5: 539ec1892612fa4235099d8627b23037
-      size: 370395
+      md5: 2dcf531e2110c97c2c64bddc81eba8ba
+      size: 370469
     - path: data/processed/y_test.csv
       hash: md5
       md5: 748f822d2dde53dc47fdfdb8e08d2c4c
       size: 8465
     - path: models/Linear_Regression_degree_3.pkl
       hash: md5
-      md5: d88b81c16152cef3545958dc474f955d
-      size: 7031
+      md5: 8f56d6af8fe683ac1decd084cd10ea56
+      size: 7111
     - path: src/scripts/evaluate.py
       hash: md5
-      md5: 0b1ebe148449a02444bc43841b4cd3f8
-      size: 1205
+      md5: b463bf4d630d492e2b5c47243aabf4ff
+      size: 1199
   evaluate_lr_degree_4:
     cmd: python src/scripts/evaluate.py models/Linear_Regression_degree_4.pkl data/processed/X_test.csv
       data/processed/y_test.csv
     deps:
     - path: data/processed/X_test.csv
       hash: md5
-      md5: 539ec1892612fa4235099d8627b23037
-      size: 370395
+      md5: 2dcf531e2110c97c2c64bddc81eba8ba
+      size: 370469
     - path: data/processed/y_test.csv
       hash: md5
       md5: 748f822d2dde53dc47fdfdb8e08d2c4c
       size: 8465
     - path: models/Linear_Regression_degree_4.pkl
       hash: md5
-      md5: f816e734f88303ee0ba30e2d5f624c47
-      size: 23055
+      md5: eec31d2413293bfac5882dd8a924572e
+      size: 23135
     - path: src/scripts/evaluate.py
       hash: md5
-      md5: 0b1ebe148449a02444bc43841b4cd3f8
-      size: 1205
+      md5: b463bf4d630d492e2b5c47243aabf4ff
+      size: 1199
   evaluate_Random_Forest_n_100:
     cmd: python src/scripts/evaluate.py models/Random_Forest_n_100.pkl data/processed/X_test.csv
       data/processed/y_test.csv
     deps:
     - path: data/processed/X_test.csv
       hash: md5
-      md5: 539ec1892612fa4235099d8627b23037
-      size: 370395
+      md5: 2dcf531e2110c97c2c64bddc81eba8ba
+      size: 370469
     - path: data/processed/y_test.csv
       hash: md5
       md5: 748f822d2dde53dc47fdfdb8e08d2c4c
       size: 8465
     - path: models/Random_Forest_n_100.pkl
       hash: md5
-      md5: 275d334f86c23cd49a012ae91d135d14
-      size: 5621575
+      md5: 7a271b2737b5309818d67b20bc0b97d8
+      size: 5630583
     - path: src/scripts/evaluate.py
       hash: md5
-      md5: 0b1ebe148449a02444bc43841b4cd3f8
-      size: 1205
+      md5: b463bf4d630d492e2b5c47243aabf4ff
+      size: 1199
+  create_directories:
+    cmd: python src/scripts/create_directories.py

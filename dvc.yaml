@@ -1,4 +1,7 @@
 stages:
+  create_directories:
+    cmd: python src/scripts/create_directories.py
+
   load_data:
     cmd: python src/scripts/load_data.py ${data.filepath} ${data.processed}train_test_data.csv
     deps:

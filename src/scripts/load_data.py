@@ -10,7 +10,7 @@ if __name__ == '__main__':
     data_path = sys.argv[1]
     output_file = sys.argv[2]
 
-    mlflow.set_tracking_uri("HTTP://tracking_server:5000")
+    mlflow.set_tracking_uri("HTTP://localhost:5000")
 
     with mlflow.start_run():
         data = load_data(data_path)
