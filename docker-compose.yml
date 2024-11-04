@@ -57,9 +57,10 @@ services:
     entrypoint: >
       /bin/sh -c '
       sleep 5;
-      /usr/bin/mc config host add minio http://minio:${MINIO_PORT} ${MINIO_ACCESS_KEY} ${MINIO_SECRET_ACCESS_KEY} --api S3v4;
-      [[ ! -z "`/usr/bin/mc ls minio | grep challenge`" ]] || /usr/bin/mc mb minio/${MLFLOW_BUCKET_NAME};
-      /usr/bin/mc policy download minio/${MLFLOW_BUCKET_NAME};
+      echo "about to add bucket: ${MLFLOW_BUCKET_NAME}";
+      /usr/bin/mc config host add minio_host http://minio:${MINIO_PORT} ${MINIO_ACCESS_KEY} ${MINIO_SECRET_ACCESS_KEY} --api S3v4;
+      [[ ! -z "`/usr/bin/mc ls minio_host | grep ${MLFLOW_BUCKET_NAME}`" ]] || /usr/bin/mc mb minio_host/${MLFLOW_BUCKET_NAME};
+      /usr/bin/mc policy download minio_host/${MLFLOW_BUCKET_NAME};
       exit 0;
       '
 
@@ -101,22 +102,6 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-
-
-  dvc:
-    build:
-      context: .
-      dockerfile: dvc/Dockerfile
-    networks:
-      - frontend
-      - backend
-    volumes:
-      # mounting the container in the directory will serve as local saving changes, any changes made to the container willl be reflect in the directory.
-      - .:/app
-    depends_on:
-      - tracking_server
-    command: ["sh", "-c", "sleep 10 && dvc repro"]
-
 
 volumes:
   db_data:

@@ -35,7 +35,7 @@ if __name__ == '__main__':
     model_base_path = sys.argv[3]
 
 
-    mlflow.set_tracking_uri("HTTP://tracking_server:5000")
+    mlflow.set_tracking_uri("HTTP://localhost:5000")
 
     for model_name, model in lr_models:
         polynomial_degree = int(model_name.split('_')[-1])
@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
             model_path = f"{model_base_path}{model_name}.pkl"
             joblib.dump(trained_model, model_path)
-            mlflow.sklearn.log_model(trained_model, model_name)
+            mlflow.sklearn.log_model(trained_model, "model")
             mlflow.log_param("polynomial_degree", polynomial_degree)
             print(f"Model {model_name} logged in MLflow")
 
@@ -55,6 +55,6 @@ if __name__ == '__main__':
 
         model_path = f"{model_base_path}Random_Forest_n_100.pkl"
         joblib.dump(model, model_path)
-        mlflow.sklearn.log_model(model, "Random_Forest_n_100")
+        mlflow.sklearn.log_model(model, "model")
         mlflow.log_param("n_estimators", 100)
         print("Model Random Forest logged in MLflow")

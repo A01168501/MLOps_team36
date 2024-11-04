@@ -20,7 +20,12 @@ def preprocess_data(data_path):
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
 
-    return X_train_scaled, X_test_scaled, y_train, y_test
+    original_columns = X.columns.tolist()  # Now this contains only feature names.
+    # Create DataFrames with original column names
+    X_train_scaled_df = pd.DataFrame(X_train_scaled, columns=original_columns)
+    X_test_scaled_df = pd.DataFrame(X_test_scaled, columns=original_columns)
+
+    return X_train_scaled_df, X_test_scaled_df, y_train, y_test
 
 if __name__ == '__main__':
     data_path = sys.argv[1]
@@ -29,7 +34,7 @@ if __name__ == '__main__':
     output_train_target = sys.argv[4]
     output_test_target = sys.argv[5]
 
-    mlflow.set_tracking_uri("HTTP://tracking_server:5000")
+    mlflow.set_tracking_uri("HTTP://localhost:5000")
 
     with mlflow.start_run():
         X_train, X_test, y_train, y_test = preprocess_data(data_path)
