@@ -28,7 +28,7 @@ def predict(AQ_data: AQData):
     # Make prediction
     prediction = model.predict([AQ_data.features])[0]
     
-    return {"prediction": int(prediction)}
+    return {"prediction": float(prediction)}
 
 # Define a root endpoint
 @app.get("/")
