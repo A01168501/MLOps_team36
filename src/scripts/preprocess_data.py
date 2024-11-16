@@ -56,6 +56,7 @@ if __name__ == '__main__':
 
     with mlflow.start_run():
         DP = DataPreprocessor(data_path)
+        DP.preprocess()
         X_train = DP.X_train 
         X_test = DP.X_test
         y_train = DP.y_train
