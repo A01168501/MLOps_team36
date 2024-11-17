@@ -4,11 +4,10 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Copy the model and server code
-COPY Linear_Regression_degree_2.pkl /app/
-COPY main.py /app/
+COPY api/inference/main.py /app/
 
 # Install dependencies
-RUN pip install fastapi uvicorn scikit-learn pydantic
+RUN pip install fastapi uvicorn onnxruntime pydantic
 
 # Expose port 8000
 EXPOSE 8000
